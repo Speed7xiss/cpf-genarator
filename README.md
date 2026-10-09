@@ -1,46 +1,58 @@
-# CPF Studio
+# CPF Toolkit
 
-Validador de CPF com interface responsiva, animações leves e cálculo dos dígitos verificadores inteiramente no navegador.
+Aplicação educacional em Node.js para validar os dígitos verificadores de CPF e gerar dados sintéticos para testar formulários. Não consulta a Receita Federal, não usa banco de dados e não confirma titularidade ou situação cadastral.
 
-## Recursos
+## Requisitos
 
-- Validação matemática do CPF usando os dois dígitos verificadores oficiais (módulo 11).
-- Formatação automática enquanto a pessoa digita.
-- Rejeição de entradas incompletas e sequências com todos os dígitos iguais.
-- Interface responsiva, animações e suporte a preferência por movimento reduzido.
-- Sem dependências de runtime, cadastro, API ou banco de dados.
-- Os dados digitados não são enviados a um servidor pelo aplicativo.
+- Node.js 20 ou superior
+- npm (incluído na instalação do Node.js)
 
-## Executar localmente
+## Iniciar
 
-Não é necessário instalar dependências. Abra `index.html` no navegador ou inicie um servidor estático na pasta:
+\`\`\`bash
+npm start
+\`\`\`
 
-```bash
-python -m http.server 8000
-```
+Abra http://localhost:3000. Para reiniciar automaticamente durante o desenvolvimento:
 
-Depois acesse http://localhost:8000.
+\`\`\`bash
+npm run dev
+\`\`\`
 
-## Como funciona a validação
+## Testes
 
-1. Remove pontuação e confirma que existem 11 dígitos.
-2. Rejeita sequências repetidas, como `11111111111`.
-3. Calcula o primeiro dígito com pesos de 10 a 2.
-4. Calcula o segundo dígito com pesos de 11 a 2.
-5. Compara os resultados calculados com os dígitos informados.
-
-Para cada soma ponderada, o dígito é calculado a partir do resto da divisão por 11, conforme a regra do CPF.
-
-## Limitações importantes
-
-A validação matemática **não** consulta a Receita Federal e não informa se um CPF foi emitido, está ativo ou pertence a uma pessoa. Um número pode passar pela verificação matemática sem corresponder a um documento atribuído. Use apenas dados fictícios ou autorizados em testes.
+\`\`\`bash
+npm test
+\`\`\`
 
 ## Estrutura
 
-- `index.html` — estrutura e conteúdo da página.
-- `style.css` — tema, layout responsivo e animações.
-- `script.js` — formatação e validação local.
+\`\`\`text
+cpf-genarator/
+├── public/
+│   ├── css/styles.css
+│   ├── js/
+│   │   ├── modules/api.js
+│   │   └── app.js
+│   └── index.html
+├── server/
+│   └── index.js
+├── src/
+│   └── cpf/
+│       ├── generator.js
+│       └── validator.js
+├── test/
+│   └── cpf.test.js
+├── package.json
+└── README.md
+\`\`\`
 
-## Licença
+## API local
 
-Este projeto é disponibilizado sob a licença MIT. Consulte [LICENSE](LICENSE).
+- \`GET /api/health\` — status do servidor.
+- \`POST /api/cpf/validate\` — body JSON: \`{"cpf":"529.982.247-25"}\`.
+- \`POST /api/cpf/generate\` — retorna um dado de teste com dígitos verificadores calculados.
+
+## Nota importante
+
+A validação é exclusivamente matemática. Um CPF que passa no cálculo não significa que o número foi emitido, que existe cadastro associado ou que pertence a determinada pessoa. Use os resultados apenas em ambientes de desenvolvimento/teste, nunca para se passar por outra pessoa ou preencher cadastros reais.
