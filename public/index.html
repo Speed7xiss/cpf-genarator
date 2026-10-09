@@ -3,49 +3,89 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b0b12">
-  <meta name="description" content="Validador de CPF e gerador de dados de teste para desenvolvimento.">
-  <title>CPF Toolkit — Validação e testes</title>
+  <meta name="theme-color" content="#171713">
+  <meta name="description" content="Ferramentas de validação de CPF e dados sintéticos para desenvolvimento.">
+  <title>CPF / Oficina de dados</title>
   <link rel="stylesheet" href="/css/styles.css">
   <script type="module" src="/js/app.js"></script>
 </head>
 <body>
-  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <div class="grain" aria-hidden="true"></div>
   <header class="topbar">
-    <a class="brand" href="/" aria-label="CPF Toolkit início"><span class="brand-mark">C</span><span>cpf<span class="brand-muted">toolkit</span></span></a>
-    <span class="local-pill"><i></i> Processamento local</span>
+    <a class="wordmark" href="/" aria-label="CPF Oficina — início">
+      <span class="wordmark-symbol">cf.</span>
+      <span class="wordmark-name">OFICINA <span>DE DADOS</span></span>
+    </a>
+    <div class="header-right">
+      <span class="edition">FERRAMENTAS BR / 01</span>
+      <a class="repo-link" href="https://github.com/Speed7xiss/cpf-genarator" target="_blank" rel="noreferrer"><span class="repo-dot">↗</span> VER REPOSITÓRIO</a>
+    </div>
   </header>
-  <main class="shell">
-    <section class="hero">
-      <div class="eyebrow"><span class="eyebrow-line"></span> FERRAMENTAS DE DESENVOLVIMENTO</div>
-      <h1>CPF, sem <span>complicação.</span></h1>
-      <p class="hero-copy">Valide os dígitos verificadores e gere dados sintéticos para testar formulários e aplicações.</p>
+
+  <main class="page">
+    <section class="intro">
+      <div class="intro-index"><span>01</span><span class="index-rule"></span><span>UTILITÁRIO DE DESENVOLVIMENTO</span></div>
+      <h1>Números sob<br><em>verificação.</em></h1>
+      <div class="intro-bottom">
+        <p>Uma bancada simples para conferir dígitos verificadores e preparar dados sintéticos de teste.</p>
+        <div class="stamp"><span>SEM</span><strong>CADASTRO</strong><span>SEM CONSULTA EXTERNA</span></div>
+      </div>
     </section>
-    <section class="workspace" aria-label="Ferramentas de CPF">
-      <article class="panel validate-panel">
-        <div class="panel-heading"><div class="panel-icon icon-check">✓</div><div><h2>Validar CPF</h2><p>Confira o formato e os dígitos verificadores.</p></div></div>
+
+    <div class="section-rule"><span>FERRAMENTAS</span><span>02 MÓDULOS</span></div>
+    <section class="workbench" aria-label="Ferramentas de CPF">
+      <article class="tool tool-validate">
+        <div class="tool-top"><span class="tool-number">A.</span><span class="tool-type">CONFERÊNCIA</span></div>
+        <h2>Validar <span>CPF</span></h2>
+        <p class="tool-description">Confira o formato e o cálculo dos dois dígitos finais.</p>
         <form id="validate-form" novalidate>
-          <label for="cpf-input">Número do CPF</label>
-          <div class="input-wrap"><input id="cpf-input" name="cpf" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" aria-describedby="input-hint"><span class="input-counter" id="digit-count">0/11</span></div>
-          <p class="field-hint" id="input-hint">Digite os 11 números para verificar o cálculo.</p>
-          <button class="button button-primary" type="submit"><span>Validar agora</span><span aria-hidden="true">↗</span></button>
+          <label for="cpf-input">DIGITE O NÚMERO</label>
+          <div class="input-frame"><input id="cpf-input" name="cpf" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" aria-describedby="input-hint"><span id="digit-count">00 / 11</span></div>
+          <p class="field-hint" id="input-hint">A pontuação é adicionada automaticamente.</p>
+          <button class="action action-dark" type="submit"><span>Conferir número</span><span class="action-arrow">↗</span></button>
         </form>
         <div class="result" id="validation-result" role="status" aria-live="polite" hidden></div>
+        <div class="tool-foot"><span>01 — ENTRADA</span><span>02 — CÁLCULO MOD 11</span></div>
       </article>
-      <article class="panel generate-panel">
-        <div class="panel-heading"><div class="panel-icon icon-spark">✳</div><div><h2>Dados de teste</h2><p>Crie um exemplo sintético para desenvolvimento.</p></div></div>
-        <div class="generator-preview"><span class="preview-label">EXEMPLO GERADO</span><strong id="generated-cpf">•••.•••.•••-••</strong><span class="preview-status"><i></i> Aguardando geração</span></div>
-        <button class="button button-secondary" id="generate-button" type="button"><span>Gerar CPF de teste</span><span aria-hidden="true">✦</span></button>
-        <button class="text-button" id="copy-button" type="button" disabled>Copiar resultado <span aria-hidden="true">⧉</span></button>
-        <p class="disclaimer">Uso exclusivo em testes. Um número que passa no cálculo não comprova emissão, titularidade ou situação cadastral na Receita Federal.</p>
+
+      <article class="tool tool-generate">
+        <div class="tool-top"><span class="tool-number">B.</span><span class="tool-type">DADOS SINTÉTICOS</span></div>
+        <h2>Gerar <span>amostra</span></h2>
+        <p class="tool-description">Escolha uma região fiscal para criar um número de teste.</p>
+        <label for="region-select">REGIÃO DE ORIGEM DO DÍGITO</label>
+        <div class="select-frame">
+          <select id="region-select" name="region">
+            <option value="any">Qualquer região — aleatória</option>
+            <option value="0">0 · Rio Grande do Sul (RS)</option>
+            <option value="1">1 · DF, GO, MT, MS, TO</option>
+            <option value="2">2 · AC, AM, AP, PA, RO, RR</option>
+            <option value="3">3 · CE, MA, PI</option>
+            <option value="4">4 · AL, PB, PE, RN</option>
+            <option value="5">5 · BA, SE</option>
+            <option value="6">6 · Minas Gerais (MG)</option>
+            <option value="7">7 · ES, RJ</option>
+            <option value="8">8 · São Paulo (SP)</option>
+            <option value="9">9 · PR, SC</option>
+          </select><span aria-hidden="true">⌄</span>
+        </div>
+        <div class="sample-card" id="sample-card">
+          <div class="sample-card-head"><span>AMOSTRA / CPF</span><span class="sample-mark">TST</span></div>
+          <strong id="generated-cpf">•••.•••.•••-••</strong>
+          <div class="sample-divider"></div>
+          <div class="origin-row"><span class="origin-index" id="origin-digit">—</span><div class="origin-copy"><span class="origin-label">DÍGITO REGIONAL</span><strong id="origin-name">Aguardando geração</strong><p id="origin-states">Selecione uma região e gere uma amostra.</p></div><span class="origin-pin" aria-hidden="true">⌖</span></div>
+        </div>
+        <button class="action action-accent" id="generate-button" type="button"><span>Gerar nova amostra</span><span class="action-arrow">↗</span></button>
+        <button class="copy-action" id="copy-button" type="button" disabled>Copiar CPF <span>⧉</span></button>
+        <p class="notice">O nono dígito (terceiro a contar do fim) indica uma região fiscal. Em grupos com vários estados, ele não revela qual estado específico. A validade matemática não comprova emissão ou titularidade.</p>
+        <div class="tool-foot"><span>03 — AMOSTRA</span><span>04 — REGIÃO</span></div>
       </article>
     </section>
-    <section class="info-row">
-      <div class="info-item"><span class="info-number">01</span><div><h3>Sem banco de dados</h3><p>O aplicativo não consulta nem armazena dados pessoais.</p></div></div>
-      <div class="info-item"><span class="info-number">02</span><div><h3>Algoritmo separado</h3><p>Validação, formatação e geração ficam em módulos independentes.</p></div></div>
-      <div class="info-item"><span class="info-number">03</span><div><h3>API própria</h3><p>Node.js oferece endpoints simples para integrar em testes.</p></div></div>
+
+    <section class="method-note">
+      <div class="method-mark">i</div><div><strong>Sobre esta ferramenta</strong><p>Não consulta bases oficiais, não salva números e não verifica se um CPF foi emitido. Use as amostras somente em desenvolvimento e testes.</p></div>
+      <a href="https://github.com/Speed7xiss/cpf-genarator" target="_blank" rel="noreferrer">CÓDIGO-FONTE ↗</a>
     </section>
-    <footer><span>CPF TOOLKIT <span class="footer-dot">/</span> OPEN SOURCE</span><span>Feito para desenvolvimento responsável.</span></footer>
+    <footer><span>CPF / OFICINA DE DADOS</span><span>PROJETO ABERTO <span class="footer-slash">/</span> <a href="https://github.com/Speed7xiss/cpf-genarator" target="_blank" rel="noreferrer">GITHUB</a></span><span>BRASIL · UTILITÁRIO LOCAL</span></footer>
   </main>
 </body>
 </html>
