@@ -15,6 +15,6 @@ export function validateCPF(cpf) {
   return postJSON('/api/cpf/validate', { cpf });
 }
 
-export function generateCPF() {
-  return postJSON('/api/cpf/generate', {});
+export function generateCPF(regionDigit = 'any') {
+  return postJSON('/api/cpf/generate', { regionDigit });
 }
