@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { validateCPF } = require('../src/cpf/validator');
 const { generateTestCPF } = require('../src/cpf/generator');
+const { getRegion } = require('../src/cpf/regions');
 
 const ROOT = path.resolve(__dirname, '..');
 const PUBLIC_DIR = path.join(ROOT, 'public');
@@ -27,7 +28,13 @@ function sendJSON(res, status, data) {
 }
 
 function serveStatic(req, res) {
-  const rawPath = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
+  let rawPath;
+  try {
+    rawPath = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
+  } catch {
+    res.writeHead(400);
+    return res.end('Bad request');
+  }
   const requested = rawPath === '/' ? '/index.html' : rawPath;
   const filePath = path.resolve(PUBLIC_DIR, '.' + requested);
 
@@ -71,7 +78,9 @@ const server = http.createServer((req, res) => {
         if (typeof parsed.cpf !== 'string' && typeof parsed.cpf !== 'number') {
           return sendJSON(res, 400, { error: 'Informe um CPF em texto.' });
         }
-        return sendJSON(res, 200, validateCPF(parsed.cpf));
+        const result = validateCPF(parsed.cpf);
+        if (result.normalized.length === 11) result.region = getRegion(result.normalized);
+        return sendJSON(res, 200, result);
       } catch {
         return sendJSON(res, 400, { error: 'JSON inválido.' });
       }
@@ -80,7 +89,22 @@ const server = http.createServer((req, res) => {
   }
 
   if (req.method === 'POST' && url.pathname === '/api/cpf/generate') {
-    return sendJSON(res, 200, generateTestCPF());
+    let body = '';
+    req.setEncoding('utf8');
+    req.on('data', chunk => {
+      body += chunk;
+      if (body.length > 2048) req.destroy();
+    });
+    req.on('end', () => {
+      try {
+        const parsed = JSON.parse(body || '{}');
+        return sendJSON(res, 200, generateTestCPF(parsed.regionDigit ?? 'any'));
+      } catch (error) {
+        const message = error instanceof RangeError ? error.message : 'JSON inválido.';
+        return sendJSON(res, 400, { error: message });
+      }
+    });
+    return;
   }
 
   if (req.method !== 'GET' && req.method !== 'HEAD') {
