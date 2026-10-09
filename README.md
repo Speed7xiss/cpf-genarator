@@ -1,58 +1,46 @@
-# CPF Toolkit
+# CPF / Oficina de Dados
 
-Aplicação educacional em Node.js para validar os dígitos verificadores de CPF e gerar dados sintéticos para testar formulários. Não consulta a Receita Federal, não usa banco de dados e não confirma titularidade ou situação cadastral.
+Ferramenta educacional em Node.js para validar dígitos verificadores de CPF e criar amostras sintéticas de teste. Não consulta a Receita Federal, não usa banco de dados e não confirma emissão, titularidade ou situação cadastral.
 
 ## Requisitos
 
-- Node.js 20 ou superior
-- npm (incluído na instalação do Node.js)
+- Node.js 20+
+- npm
 
 ## Iniciar
 
 \`\`\`bash
+npm install
 npm start
 \`\`\`
 
-Abra http://localhost:3000. Para reiniciar automaticamente durante o desenvolvimento:
-
-\`\`\`bash
-npm run dev
-\`\`\`
-
-## Testes
-
-\`\`\`bash
-npm test
-\`\`\`
+Abra http://localhost:3000. Para desenvolvimento com reinicialização automática: \`npm run dev\`. Para executar os testes: \`npm test\`.
 
 ## Estrutura
 
 \`\`\`text
-cpf-genarator/
-├── public/
-│   ├── css/styles.css
-│   ├── js/
-│   │   ├── modules/api.js
-│   │   └── app.js
-│   └── index.html
-├── server/
-│   └── index.js
-├── src/
-│   └── cpf/
-│       ├── generator.js
-│       └── validator.js
-├── test/
-│   └── cpf.test.js
-├── package.json
-└── README.md
+public/
+  css/styles.css
+  js/app.js
+  js/modules/api.js
+  index.html
+server/index.js
+src/cpf/
+  generator.js
+  regions.js
+  validator.js
+test/cpf.test.js
+package.json
 \`\`\`
 
-## API local
+## API
 
-- \`GET /api/health\` — status do servidor.
-- \`POST /api/cpf/validate\` — body JSON: \`{"cpf":"529.982.247-25"}\`.
-- \`POST /api/cpf/generate\` — retorna um dado de teste com dígitos verificadores calculados.
+- \`GET /api/health\` — estado do servidor.
+- \`POST /api/cpf/validate\` — JSON \`{"cpf":"529.982.247-25"}\`.
+- \`POST /api/cpf/generate\` — JSON opcional \`{"regionDigit":"8"}\`; use \`"any"\` para uma região aleatória.
 
-## Nota importante
+O nono dígito do CPF (terceiro a contar do fim) indica uma região fiscal. Para algumas regiões, o código abrange vários estados e não permite identificar um estado individual.
 
-A validação é exclusivamente matemática. Um CPF que passa no cálculo não significa que o número foi emitido, que existe cadastro associado ou que pertence a determinada pessoa. Use os resultados apenas em ambientes de desenvolvimento/teste, nunca para se passar por outra pessoa ou preencher cadastros reais.
+## Uso responsável
+
+Use os números gerados somente em desenvolvimento/testes. A validade matemática não indica que o número foi emitido, que existe cadastro ou que pertence a uma pessoa.
