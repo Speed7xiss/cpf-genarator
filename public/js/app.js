@@ -7,9 +7,12 @@ const count = document.querySelector('#digit-count');
 const form = document.querySelector('#validate-form');
 const result = document.querySelector('#validation-result');
 const generateButton = document.querySelector('#generate-button');
+const regionSelect = document.querySelector('#region-select');
 const generatedCPF = document.querySelector('#generated-cpf');
+const originDigit = document.querySelector('#origin-digit');
+const originName = document.querySelector('#origin-name');
+const originStates = document.querySelector('#origin-states');
 const copyButton = document.querySelector('#copy-button');
-const previewStatus = document.querySelector('.preview-status');
 let currentGenerated = '';
 
 function onlyDigits(value) {
@@ -26,7 +29,7 @@ function formatInput(value) {
 
 input.addEventListener('input', () => {
   input.value = formatInput(input.value);
-  count.textContent = onlyDigits(input.value).length + '/11';
+  count.textContent = String(onlyDigits(input.value).length).padStart(2, '0') + ' / 11';
   if (!result.hidden) result.hidden = true;
 });
 
@@ -34,33 +37,50 @@ form.addEventListener('submit', async event => {
   event.preventDefault();
   result.hidden = false;
   result.className = 'result';
-  result.textContent = 'Verificando dígitos…';
+  result.textContent = 'Conferindo os dígitos…';
   try {
     const data = await validateCPF(onlyDigits(input.value));
     result.classList.add(data.valid ? 'success' : 'error');
-    result.textContent = (data.valid ? '✓ CPF válido matematicamente. ' : '× CPF inválido. ') + data.reason + ' Isso não confirma existência ou situação cadastral.';
+    let message = (data.valid ? '✓ Cálculo válido. ' : '× Cálculo inválido. ') + data.reason;
+    if (data.region) {
+      message += ' Região indicada pelo nono dígito (' + data.region.digit + '): ' +
+        data.region.states.join(', ') + '. ' + data.region.note;
+    }
+    message += ' A validação não confirma emissão ou titularidade.';
+    result.textContent = message;
   } catch (error) {
     result.classList.add('error');
     result.textContent = error.message || 'Não foi possível conectar ao servidor.';
   }
 });
 
+function showRegion(region) {
+  originDigit.textContent = String(region.digit);
+  originName.textContent = region.label;
+  originStates.textContent = region.states.join(' · ') + (region.stateCount > 1 ? ' — grupo regional' : ' — estado');
+}
+
 generateButton.addEventListener('click', async () => {
   generateButton.disabled = true;
-  generateButton.querySelector('span').textContent = 'Gerando…';
+  generateButton.querySelector('span').textContent = 'Preparando amostra…';
+  generateButton.classList.add('is-busy');
   try {
-    const data = await generateCPF();
+    const data = await generateCPF(regionSelect.value);
     currentGenerated = data.formatted;
     generatedCPF.textContent = currentGenerated;
-    previewStatus.classList.add('ready');
-    previewStatus.innerHTML = '<i></i> Dado sintético pronto para testes';
+    showRegion(data.region);
     copyButton.disabled = false;
+    const card = document.querySelector('#sample-card');
+    card.classList.remove('sample-pop');
+    void card.offsetWidth;
+    card.classList.add('sample-pop');
   } catch (error) {
-    previewStatus.classList.remove('ready');
-    previewStatus.textContent = error.message || 'Erro ao gerar';
+    originName.textContent = 'Não foi possível gerar';
+    originStates.textContent = error.message || 'Tente novamente.';
   } finally {
     generateButton.disabled = false;
-    generateButton.querySelector('span').textContent = 'Gerar CPF de teste';
+    generateButton.classList.remove('is-busy');
+    generateButton.querySelector('span').textContent = 'Gerar nova amostra';
   }
 });
 
@@ -68,8 +88,12 @@ copyButton.addEventListener('click', async () => {
   if (!currentGenerated) return;
   try {
     await navigator.clipboard.writeText(currentGenerated);
-    copyButton.innerHTML = 'Copiado! <span aria-hidden="true">✓</span>';
-    setTimeout(() => { copyButton.innerHTML = 'Copiar resultado <span aria-hidden="true">⧉</span>'; }, 1400);
+    copyButton.innerHTML = 'Copiado para a área de transferência <span>✓</span>';
+    copyButton.classList.add('copied');
+    setTimeout(() => {
+      copyButton.innerHTML = 'Copiar CPF <span>⧉</span>';
+      copyButton.classList.remove('copied');
+    }, 1500);
   } catch {
     copyButton.textContent = currentGenerated;
   }
