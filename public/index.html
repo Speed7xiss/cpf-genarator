@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0b12">
+  <meta name="description" content="Validador de CPF e gerador de dados de teste para desenvolvimento.">
+  <title>CPF Toolkit — Validação e testes</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="/js/app.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="CPF Toolkit início"><span class="brand-mark">C</span><span>cpf<span class="brand-muted">toolkit</span></span></a>
+    <span class="local-pill"><i></i> Processamento local</span>
+  </header>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> FERRAMENTAS DE DESENVOLVIMENTO</div>
+      <h1>CPF, sem <span>complicação.</span></h1>
+      <p class="hero-copy">Valide os dígitos verificadores e gere dados sintéticos para testar formulários e aplicações.</p>
+    </section>
+
+    <section class="workspace" aria-label="Ferramentas de CPF">
+      <article class="panel validate-panel">
+        <div class="panel-heading">
+          <div class="panel-icon icon-check">✓</div>
+          <div><h2>Validar CPF</h2><p>Confira o formato e os dígitos verificadores.</p></div>
+        </div>
+        <form id="validate-form" novalidate>
+          <label for="cpf-input">Número do CPF</label>
+          <div class="input-wrap"><input id="cpf-input" name="cpf" inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00" aria-describedby="input-hint"><span class="input-counter" id="digit-count">0/11</span></div>
+          <p class="field-hint" id="input-hint">Digite os 11 números para verificar o cálculo.</p>
+          <button class="button button-primary" type="submit"><span>Validar agora</span><span aria-hidden="true">↗</span></button>
+        </form>
+        <div class="result" id="validation-result" role="status" aria-live="polite" hidden></div>
+      </article>
+
+      <article class="panel generate-panel">
+        <div class="panel-heading">
+          <div class="panel-icon icon-spark">✳</div>
+          <div><h2>Dados de teste</h2><p>Crie um exemplo sintético para desenvolvimento.</p></div>
+        </div>
+        <div class="generator-preview">
+          <span class="preview-label">EXEMPLO GERADO</span>
+          <strong id="generated-cpf">•••.•••.•••-••</strong>
+          <span class="preview-status"><i></i> Aguardando geração</span>
+        </div>
+        <button class="button button-secondary" id="generate-button" type="button"><span>Gerar CPF de teste</span><span aria-hidden="true">✦</span></button>
+        <button class="text-button" id="copy-button" type="button" disabled>Copiar resultado <span aria-hidden="true">⧉</span></button>
+        <p class="disclaimer">Uso exclusivo em testes. Um número que passa no cálculo não comprova emissão, titularidade ou situação cadastral na Receita Federal.</p>
+      </article>
+    </section>
+
+    <section class="info-row">
+      <div class="info-item"><span class="info-number">01</span><div><h3>Sem banco de dados</h3><p>O aplicativo não consulta nem armazena dados pessoais.</p></div></div>
+      <div class="info-item"><span class="info-number">02</span><div><h3>Algoritmo separado</h3><p>Validação, formatação e geração ficam em módulos independentes.</p></div></div>
+      <div class="info-item"><span class="info-number">03</span><div><h3>API própria</h3><p>Node.js oferece endpoints simples para integrar em testes.</p></div></div>
+    </section>
+    <footer><span>CPF TOOLKIT <span class="footer-dot">/</span> OPEN SOURCE</span><span>Feito para desenvolvimento responsável.</span></footer>
+  </main>
+</body>
+</html>
