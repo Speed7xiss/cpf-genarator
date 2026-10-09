@@ -1,5 +1,7 @@
 'use strict';
 
+import { validateCPF, generateCPF } from './modules/api.js';
+
 const input = document.querySelector('#cpf-input');
 const count = document.querySelector('#digit-count');
 const form = document.querySelector('#validate-form');
@@ -23,26 +25,18 @@ function formatInput(value) {
 }
 
 input.addEventListener('input', () => {
-  const position = input.selectionStart;
   input.value = formatInput(input.value);
   count.textContent = onlyDigits(input.value).length + '/11';
-  if (result.hidden === false) result.hidden = true;
+  if (!result.hidden) result.hidden = true;
 });
 
 form.addEventListener('submit', async event => {
   event.preventDefault();
-  const cpf = onlyDigits(input.value);
   result.hidden = false;
   result.className = 'result';
   result.textContent = 'Verificando dígitos…';
   try {
-    const response = await fetch('/api/cpf/validate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cpf })
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'Falha na validação.');
+    const data = await validateCPF(onlyDigits(input.value));
     result.classList.add(data.valid ? 'success' : 'error');
     result.textContent = (data.valid ? '✓ CPF válido matematicamente. ' : '× CPF inválido. ') + data.reason + ' Isso não confirma existência ou situação cadastral.';
   } catch (error) {
@@ -55,9 +49,7 @@ generateButton.addEventListener('click', async () => {
   generateButton.disabled = true;
   generateButton.querySelector('span').textContent = 'Gerando…';
   try {
-    const response = await fetch('/api/cpf/generate', { method: 'POST' });
-    if (!response.ok) throw new Error('Falha ao gerar dado de teste.');
-    const data = await response.json();
+    const data = await generateCPF();
     currentGenerated = data.formatted;
     generatedCPF.textContent = currentGenerated;
     previewStatus.classList.add('ready');
