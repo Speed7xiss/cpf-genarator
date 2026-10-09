@@ -1,28 +1,44 @@
-# CPF / Oficina de Dados
+# CPF Toolkit
 
-Ferramenta educacional em Node.js para validar dígitos verificadores de CPF e criar amostras sintéticas de teste. Não consulta a Receita Federal, não usa banco de dados e não confirma emissão, titularidade ou situação cadastral.
+Ferramenta educacional para conferir matematicamente dígitos verificadores de CPF e criar amostras sintéticas para desenvolvimento. Não consulta a Receita Federal e não confirma emissão, titularidade ou situação cadastral.
 
-## Requisitos
+## Hospedar na Vercel
 
-- Node.js 20+
-- npm
+1. Abra https://vercel.com/new e conecte sua conta GitHub.
+2. Importe o repositório `Speed7xiss/cpf-genarator`.
+3. Deixe o **Root Directory** como `./` e o Framework Preset como **Other**.
+4. Não configure Build Command nem Output Directory; a Vercel servirá os arquivos estáticos de `public/` e as funções de `api/`.
+5. Clique em **Deploy**. A cada push na branch principal, a Vercel fará um novo deploy.
 
-## Iniciar
+O arquivo `vercel.json` define cabeçalhos de segurança. Os endpoints em `api/cpf/` funcionam como funções serverless, sem precisar manter um servidor Node ativo.
 
-\`\`\`bash
+## Rodar localmente
+
+Requer Node.js 20 ou superior.
+
+```bash
 npm install
 npm start
-\`\`\`
+```
 
-Abra http://localhost:3000. Para desenvolvimento com reinicialização automática: \`npm run dev\`. Para executar os testes: \`npm test\`.
+Abra http://localhost:3000. Para reinicialização automática durante o desenvolvimento, use `npm run dev`. Para os testes, use `npm test`.
 
 ## Estrutura
 
-\`\`\`text
+```text
+api/
+  cpf/
+    generate.js
+    validate.js
 public/
-  css/styles.css
-  js/app.js
-  js/modules/api.js
+  css/
+    motion.css
+    styles.css
+  js/
+    app.js
+    modules/
+      api.js
+      motion.js
   index.html
 server/index.js
 src/cpf/
@@ -30,17 +46,17 @@ src/cpf/
   regions.js
   validator.js
 test/cpf.test.js
+vercel.json
 package.json
-\`\`\`
+```
 
-## API
+## Endpoints
 
-- \`GET /api/health\` — estado do servidor.
-- \`POST /api/cpf/validate\` — JSON \`{"cpf":"529.982.247-25"}\`.
-- \`POST /api/cpf/generate\` — JSON opcional \`{"regionDigit":"8"}\`; use \`"any"\` para uma região aleatória.
+- `POST /api/cpf/validate` — JSON: `{"cpf":"529.982.247-25"}`.
+- `POST /api/cpf/generate` — JSON opcional: `{"regionDigit":"8"}`; use `"any"` para grupo regional aleatório.
 
-O nono dígito do CPF (terceiro a contar do fim) indica uma região fiscal. Para algumas regiões, o código abrange vários estados e não permite identificar um estado individual.
+Os endpoints respondem apenas a requisições POST. O nono dígito (terceiro a contar do fim) indica um grupo regional, não necessariamente um estado individual.
 
 ## Uso responsável
 
-Use os números gerados somente em desenvolvimento/testes. A validade matemática não indica que o número foi emitido, que existe cadastro ou que pertence a uma pessoa.
+Use amostras geradas somente em desenvolvimento e testes. A consistência matemática não significa que um CPF foi emitido ou pertence a alguém.
