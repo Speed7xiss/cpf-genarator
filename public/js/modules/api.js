@@ -11,12 +11,10 @@ async function postJSON(url, payload) {
   return data;
 }
 
-function validateCPF(cpf) {
+export function validateCPF(cpf) {
   return postJSON('/api/cpf/validate', { cpf });
 }
 
-function generateCPF() {
+export function generateCPF() {
   return postJSON('/api/cpf/generate', {});
 }
-
-module.exports = undefined;
