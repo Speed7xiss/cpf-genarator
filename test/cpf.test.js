@@ -25,7 +25,7 @@ test('rejects wrong length', () => {
 });
 
 test('region is based on the ninth digit, not the check digits', () => {
-  assert.deepEqual(getRegion('52998224725').states, ['SP']);
+  assert.deepEqual(getRegion('52998224725').states, ['ES', 'RJ']);
   assert.deepEqual(getRegion('12345678900').states, ['PR', 'SC']);
 });
 
